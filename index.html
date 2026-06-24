@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mry's music list</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="desktop">
+
+  <!-- Main Window -->
+  <div class="window main-window" id="main-window">
+    <div class="title-bar" id="main-title-bar">
+      <div class="title-bar-icon">&#9835;</div>
+      <div class="title-bar-text">mry's music list &mdash; Album Tier Rankings</div>
+      <div class="title-bar-buttons">
+        <button class="tb-btn tb-min" title="Minimize">&#8211;</button>
+        <button class="tb-btn tb-max" title="Maximize">&#9633;</button>
+        <button class="tb-btn tb-close" title="Close">&#10005;</button>
+      </div>
+    </div>
+
+    <div class="menu-bar">
+      <span class="menu-item" tabindex="0">File</span>
+      <span class="menu-item" tabindex="0">Edit</span>
+      <span class="menu-item" tabindex="0">View</span>
+      <span class="menu-item" tabindex="0">Favorites</span>
+      <span class="menu-item" tabindex="0">Help</span>
+    </div>
+
+    <div class="toolbar">
+      <button class="xp-btn" onclick="openDialog()">
+        <span class="btn-icon">&#43;</span>&nbsp;Add Album
+      </button>
+      <div class="tb-sep"></div>
+      <button class="xp-btn" onclick="exportList()">&#128190; Export</button>
+      <button class="xp-btn" onclick="importList()">&#128194; Import</button>
+      <div class="tb-sep"></div>
+      <button class="xp-btn" onclick="clearAll()">&#128465; Clear All</button>
+    </div>
+
+    <div class="addr-bar">
+      <span class="addr-label">Address:</span>
+      <div class="addr-input">&#127926; mrymusiclist://tier-rankings</div>
+      <button class="xp-btn addr-go">Go</button>
+    </div>
+
+    <div class="window-body">
+      <div class="tier-list" id="tier-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-panel" id="status-text">Ready</div>
+      <div class="status-panel status-count">Albums: <span id="album-count">0</span></div>
+      <div class="status-panel status-credit">&#169; mry's music list</div>
+    </div>
+  </div>
+
+  <!-- Add Album Dialog -->
+  <div class="dialog-overlay" id="dialog-overlay" onclick="overlayClick(event)">
+    <div class="window dialog-window" id="add-dialog">
+      <div class="title-bar">
+        <div class="title-bar-icon">&#43;</div>
+        <div class="title-bar-text">Add New Album</div>
+        <div class="title-bar-buttons">
+          <button class="tb-btn tb-close" onclick="closeDialogBtn()">&#10005;</button>
+        </div>
+      </div>
+      <div class="dialog-body">
+        <form id="add-form" onsubmit="submitAlbum(event)">
+          <table class="form-table">
+            <tr>
+              <td class="form-label"><label for="album-name">Album Name:</label></td>
+              <td><input type="text" id="album-name" class="xp-input" placeholder="e.g. Dark Side of the Moon" required></td>
+            </tr>
+            <tr>
+              <td class="form-label"><label>Cover Image:</label></td>
+              <td>
+                <div class="image-row">
+                  <label class="xp-btn file-label" title="Browse for image file">
+                    &#128194; Browse...
+                    <input type="file" id="album-image-file" accept="image/*" onchange="previewImage(this)">
+                  </label>
+                  <span class="or-sep">&mdash; or &mdash;</span>
+                  <input type="text" id="album-image-url" class="xp-input url-input" placeholder="Paste image URL...">
+                </div>
+                <div id="preview-wrap">
+                  <img id="image-preview" src="" alt="Preview">
+                  <span id="preview-label">Preview</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="form-label"><label for="album-link">Album Link:</label></td>
+              <td><input type="text" id="album-link" class="xp-input" placeholder="https://open.spotify.com/..."></td>
+            </tr>
+            <tr>
+              <td class="form-label"><label for="album-tier">Tier:</label></td>
+              <td>
+                <select id="album-tier" class="xp-select">
+                  <option value="S">S &mdash; God Tier</option>
+                  <option value="A">A &mdash; Amazing</option>
+                  <option value="B" selected>B &mdash; Good</option>
+                  <option value="C">C &mdash; Decent</option>
+                  <option value="D">D &mdash; Meh</option>
+                  <option value="E">E &mdash; Bad</option>
+                  <option value="F">F &mdash; Trash</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <div class="dialog-footer">
+            <button type="submit" class="xp-btn xp-btn-primary">&#10003;&nbsp; OK</button>
+            <button type="button" class="xp-btn" onclick="closeDialogBtn()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <button class="start-btn">
+      <span class="win-logo">&#10070;</span><strong>start</strong>
+    </button>
+    <div class="taskbar-divider"></div>
+    <div class="taskbar-windows">
+      <button class="tw-btn active">&#9835;&nbsp;mry's music list</button>
+    </div>
+    <div class="system-tray">
+      <span class="tray-icon" title="Volume">&#128266;</span>
+      <span class="tray-icon" title="Network">&#127760;</span>
+      <div class="tray-clock" id="tray-clock">12:00 PM</div>
+    </div>
+  </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
