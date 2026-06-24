@@ -19,8 +19,15 @@ body {
 
 /* ============ DESKTOP ============ */
 .desktop {
+   
   width: 100vw;
   height: 100vh;
+  
+  background: url(https://ia600706.us.archive.org/28/items/theoriginalfilesofsomewindowswallpapers/bliss%20600dpi.jpg);
+  background-size: cover;
+  background-position: center;
+  
+  /*
   background:
     radial-gradient(ellipse 120% 60% at 50% 100%, #4A8A28 0%, #2E6210 35%, transparent 65%),
     linear-gradient(180deg,
@@ -31,11 +38,14 @@ body {
       #B8E0F8 68%,
       #D8EFF8 75%
     );
+  */
+  
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 30px;
+ 
 }
 
 /* ============ WINDOW BASE ============ */
