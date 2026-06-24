@@ -19,32 +19,13 @@ body {
 
 /* ============ DESKTOP ============ */
 .desktop {
-   
   width: 100vw;
   height: 100vh;
-  
-  background-size: cover;
-  background-position: center;
-  
-  /*
-  background:
-    radial-gradient(ellipse 120% 60% at 50% 100%, #4A8A28 0%, #2E6210 35%, transparent 65%),
-    linear-gradient(180deg,
-      #1A62B8 0%,
-      #3A88CC 35%,
-      #68B8E8 52%,
-      #90CFF0 60%,
-      #B8E0F8 68%,
-      #D8EFF8 75%
-    );
-  */
-
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 30px;
- 
 }
 
 /* ============ WINDOW BASE ============ */
@@ -70,6 +51,8 @@ body {
   height: calc(100vh - 65px);
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 /* ============ TITLE BAR ============ */
@@ -856,10 +839,7 @@ body {
 }
 .welcome-overlay.hidden { display: none; }
 
-.welcome-window {
-  width: 420px;
-  flex-shrink: 0;
-}
+.welcome-window { width: 440px; flex-shrink: 0; }
 
 .welcome-body {
   background: #ECE9D8;
@@ -868,33 +848,28 @@ body {
 
 .welcome-icon-row {
   display: flex;
+  gap: 16px;
   align-items: flex-start;
-  gap: 14px;
   margin-bottom: 16px;
 }
 
 .welcome-icon {
-  font-size: 32px;
+  font-size: 42px;
   flex-shrink: 0;
   line-height: 1;
 }
 
-.welcome-text {
-  font-size: 11px;
-  font-family: 'Tahoma', Arial, sans-serif;
-  color: #000;
-  line-height: 1.6;
-}
-
 .welcome-text p {
-  margin: 0 0 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+  color: #000;
 }
 .welcome-text p:last-child { margin-bottom: 0; }
 
 .welcome-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
-  padding-top: 14px;
+  padding-top: 12px;
   border-top: 1px solid #B0ACA0;
 }

@@ -3,6 +3,55 @@
 const TIERS = ['S', 'A', 'B', 'C', 'D', 'E', 'F'];
 const STORAGE_KEY = 'mrymusiclist_v1';
 
+// bliss, autumn, azul, tulips, follow are 7x more likely than the rest
+const WALLPAPERS = [
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/bliss.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/autumn.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/azul.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/tulips.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/follow.png',
+  'elements/wallpapers/moonflower.png',
+  'elements/wallpapers/paradise.png',
+  'elements/wallpapers/snowtrees.png',
+  'elements/wallpapers/solareclipse.png',
+  'elements/wallpapers/stonehenge.png',
+];
+
+(function setRandomWallpaper() {
+  const wp = WALLPAPERS[Math.floor(Math.random() * WALLPAPERS.length)];
+  document.getElementById('wallpaper-bg').src = wp;
+})();
+
 let albums = {};
 
 function loadAlbums() {
@@ -114,6 +163,11 @@ function buildAlbumEl(album, tier, idx) {
   item.appendChild(nameEl);
   item.appendChild(removeBtn);
   return item;
+}
+
+/* ---- WELCOME ---- */
+function closeWelcome() {
+  document.getElementById('welcome-overlay').classList.add('hidden');
 }
 
 /* ---- DIALOG ---- */
@@ -246,30 +300,6 @@ updateClock();
 
 /* ---- FORM SUBMIT HANDLER ---- */
 document.getElementById('add-form').addEventListener('submit', submitAlbum);
-
-/* ---- WALLPAPER ---- */
-const WALLPAPERS = [
-  'elements/wallpapers/Autumn.jpg',
-  'elements/wallpapers/Azul.jpg',
-  'elements/wallpapers/Bliss.jpg',
-  'elements/wallpapers/Follow.jpg',
-  'elements/wallpapers/Moon flower (Unedited Version).jpg',
-  'elements/wallpapers/Paradise.jpg',
-  'elements/wallpapers/Snow Trees.jpg',
-  'elements/wallpapers/Solar Eclipse.jpg',
-  'elements/wallpapers/Stonehenge (Getty Images Rescan).jpg',
-  'elements/wallpapers/Tulips.jpg'
-];
-
-(function setRandomWallpaper() {
-  const wp = WALLPAPERS[Math.floor(Math.random() * WALLPAPERS.length)];
-  document.querySelector('.desktop').style.backgroundImage = 'url(“' + wp + '”)';
-})();
-
-/* ---- WELCOME POPUP ---- */
-function closeWelcome() {
-  document.getElementById('welcome-overlay').classList.add('hidden');
-}
 
 /* ---- INIT ---- */
 loadAlbums();
