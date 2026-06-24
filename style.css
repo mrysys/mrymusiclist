@@ -588,7 +588,7 @@ body {
   );
 }
 
-.win-logo { font-size: 16px; }
+.win-logo { width: 20px; height: 20px; object-fit: contain; vertical-align: middle; }
 
 .taskbar-divider {
   width: 2px;

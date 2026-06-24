@@ -250,3 +250,46 @@ document.getElementById('add-form').addEventListener('submit', submitAlbum);
 loadAlbums();
 renderTierList();
 setStatus('Welcome to mry\'s music list! Click “Add Album” to get started.');
+
+/* ---- BACKGROUND MUSIC ---- */
+const SONGS = [
+  'elements/music/The Reverse Will.mp3',
+  'elements/music/(dream) - Remaster.mp3',
+  'elements/music/このまま、どこまでも〜ほうき飛行〜.mp3',
+  'elements/music/2008 Toyota Corolla.mp3',
+  'elements/music/End of Small Sanctuary.mp3',
+  'elements/music/SABBATH.mp3',
+  'elements/music/New Look (Wii U Mii Maker Lofi Mix).mp3',
+  'elements/music/2010 Toyota Corolla.mp3',
+  'elements/music/LEASE.mp3',
+  'elements/music/Heartbeat, Heartbreak.mp3',
+  'elements/music/TAE.mp3',
+  'elements/music/PRESENT FOR YOU.mp3',
+  'elements/music/Map Muzak.mp3',
+  'elements/music/nostalgic breakdown.mp3'
+];
+
+const bgAudio = document.getElementById('bg-audio');
+bgAudio.volume = 0.15;
+
+function playRandomSong() {
+  bgAudio.src = SONGS[Math.floor(Math.random() * SONGS.length)];
+  bgAudio.play().catch(() => {});
+}
+
+bgAudio.addEventListener('ended', playRandomSong);
+playRandomSong();
+
+// Fallback for browsers that block autoplay until first interaction
+const autoplayFallback = () => {
+  if (bgAudio.paused) bgAudio.play().catch(() => {});
+  document.removeEventListener('click', autoplayFallback);
+  document.removeEventListener('keydown', autoplayFallback);
+};
+document.addEventListener('click', autoplayFallback);
+document.addEventListener('keydown', autoplayFallback);
+
+function toggleMute() {
+  bgAudio.muted = !bgAudio.muted;
+  document.getElementById('tray-volume').textContent = bgAudio.muted ? '🔇' : '🔊';
+}

@@ -125,20 +125,21 @@
   <!-- Taskbar -->
   <div class="taskbar">
     <button class="start-btn">
-      <span class="win-logo">&#10070;</span><strong>start</strong>
+      <img src="elements/images/xplogo.jpeg" class="win-logo" alt="Windows XP Logo"><strong>start</strong>
     </button>
     <div class="taskbar-divider"></div>
     <div class="taskbar-windows">
       <button class="tw-btn active">&#9835;&nbsp;mry's music list</button>
     </div>
     <div class="system-tray">
-      <span class="tray-icon" title="Volume">&#128266;</span>
+      <span class="tray-icon" id="tray-volume" title="Toggle Mute" onclick="toggleMute()" style="cursor:pointer">&#128266;</span>
       <span class="tray-icon" title="Network">&#127760;</span>
       <div class="tray-clock" id="tray-clock">12:00 PM</div>
     </div>
   </div>
 
 </div>
+<audio id="bg-audio"></audio>
 <script src="script.js"></script>
 </body>
 </html>
