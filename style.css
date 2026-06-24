@@ -685,3 +685,162 @@ body {
   .addr-bar { display: none; }
   .menu-bar { display: none; }
 }
+
+/* ============ MEDIA PLAYER ============ */
+.player-window {
+  position: absolute;
+  top: 60px;
+  right: 30px;
+  width: 380px;
+  display: none;
+  z-index: 150;
+}
+
+.player-body {
+  background: #1c1c1c;
+  border-top: 1px solid #444;
+}
+
+.player-info-bar {
+  background: #0d0d0d;
+  padding: 7px 10px;
+  border-bottom: 1px solid #2a2a2a;
+  overflow: hidden;
+}
+
+.player-song-name {
+  color: #ff9500;
+  font-size: 11px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+  font-family: 'Tahoma', sans-serif;
+}
+
+.player-song-sub {
+  color: #444;
+  font-size: 10px;
+  font-family: 'Tahoma', sans-serif;
+}
+
+.player-viz-wrap {
+  background: #000;
+  line-height: 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+#viz-canvas {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+.player-seek-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: #0d0d0d;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.player-seek-bar {
+  flex: 1;
+  height: 6px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  position: relative;
+  cursor: pointer;
+}
+
+.player-seek-fill {
+  height: 100%;
+  background: linear-gradient(to right, #aa3300, #ff9500);
+  width: 0%;
+  pointer-events: none;
+}
+
+.player-time {
+  color: #666;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  min-width: 32px;
+  text-align: right;
+}
+
+.player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  background: #181818;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.player-btn {
+  background: linear-gradient(to bottom, #2e2e2e, #1a1a1a);
+  border: 1px solid #484848;
+  color: #aaa;
+  font-size: 10px;
+  padding: 5px 11px;
+  cursor: pointer;
+  font-family: 'Tahoma', sans-serif;
+  border-radius: 2px;
+  min-width: 40px;
+}
+
+.player-btn:hover {
+  background: linear-gradient(to bottom, #3c3c3c, #282828);
+  color: #fff;
+  border-color: #666;
+}
+
+.player-btn:active {
+  background: linear-gradient(to bottom, #111, #1e1e1e);
+}
+
+.player-playpause {
+  color: #ff9500;
+  border-color: #884400;
+  font-size: 12px;
+  min-width: 48px;
+}
+
+.player-playpause:hover {
+  color: #ffcc00;
+  border-color: #cc6600;
+}
+
+.player-vol-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #111;
+}
+
+.player-vol-icon {
+  color: #888;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+
+.player-vol-icon:hover { color: #fff; }
+
+.player-vol-slider {
+  flex: 1;
+  cursor: pointer;
+  accent-color: #ff9500;
+}
+
+.player-vol-pct {
+  color: #555;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  min-width: 30px;
+  text-align: right;
+}

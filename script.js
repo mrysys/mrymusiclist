@@ -251,6 +251,175 @@ loadAlbums();
 renderTierList();
 setStatus('Welcome to mry\'s music list! Click “Add Album” to get started.');
 
+/* ---- MEDIA PLAYER ---- */
+let audioCtx = null;
+let analyser = null;
+let vizAnimId = null;
+const peaks = [];
+
+function makeDraggable(el, handle) {
+  let sx, sy, sl, st;
+  handle.addEventListener('mousedown', e => {
+    if (e.target.closest('.title-bar-buttons')) return;
+    sx = e.clientX; sy = e.clientY;
+    const r = el.getBoundingClientRect();
+    sl = r.left; st = r.top;
+    const onMove = e2 => {
+      el.style.left = (sl + e2.clientX - sx) + 'px';
+      el.style.top  = (st + e2.clientY - sy) + 'px';
+    };
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    e.preventDefault();
+  });
+}
+
+makeDraggable(document.getElementById('player-window'), document.getElementById('player-title-bar'));
+
+function initAudioCtx() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+  analyser.smoothingTimeConstant = 0.8;
+  const src = audioCtx.createMediaElementSource(bgAudio);
+  src.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+
+function togglePlayer() {
+  const win = document.getElementById('player-window');
+  const btn = document.getElementById('player-taskbar-btn');
+  const showing = win.style.display === 'block';
+  win.style.display = showing ? 'none' : 'block';
+  btn.classList.toggle('active', !showing);
+  if (!showing) {
+    initAudioCtx();
+    audioCtx.resume().catch(() => {});
+    startViz();
+    updatePlayerSong();
+  } else {
+    stopViz();
+  }
+}
+
+function updatePlayerSong() {
+  const el = document.getElementById('player-song-name');
+  if (!el || !bgAudio.src) return;
+  const name = decodeURIComponent(bgAudio.src.split('/').pop()).replace(/\.mp3$/i, '');
+  el.textContent = name || 'No song playing';
+}
+
+function startViz() {
+  const canvas = document.getElementById('viz-canvas');
+  canvas.width = canvas.offsetWidth || 360;
+  canvas.height = canvas.offsetHeight || 160;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const barCount = 32;
+  const gap = 2;
+  const barW = Math.floor((W - gap * (barCount - 1)) / barCount);
+
+  for (let i = 0; i < barCount; i++) peaks[i] = 0;
+
+  function frame() {
+    vizAnimId = requestAnimationFrame(frame);
+    const bufLen = analyser.frequencyBinCount;
+    const data = new Uint8Array(bufLen);
+    analyser.getByteFrequencyData(data);
+
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, W, H);
+
+    let x = 0;
+    for (let i = 0; i < barCount; i++) {
+      const binStart = Math.floor(i * bufLen / barCount);
+      const binEnd   = Math.max(binStart + 1, Math.floor((i + 1) * bufLen / barCount));
+      let sum = 0;
+      for (let b = binStart; b < binEnd; b++) sum += data[b];
+      const val  = (sum / (binEnd - binStart)) / 255;
+      const barH = Math.max(2, val * (H - 6));
+
+      if (barH > peaks[i]) peaks[i] = barH;
+      else peaks[i] = Math.max(0, peaks[i] - 1.5);
+
+      const grad = ctx.createLinearGradient(0, H, 0, H - barH);
+      grad.addColorStop(0,    '#7a1e00');
+      grad.addColorStop(0.55, '#ff6600');
+      grad.addColorStop(1,    '#ffcc00');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, H - barH, barW, barH);
+
+      if (peaks[i] > 3) {
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(x, Math.floor(H - peaks[i] - 2), barW, 2);
+      }
+
+      x += barW + gap;
+    }
+  }
+  frame();
+}
+
+function stopViz() {
+  if (vizAnimId) { cancelAnimationFrame(vizAnimId); vizAnimId = null; }
+}
+
+function playerPlayPause() {
+  if (bgAudio.paused) bgAudio.play().catch(() => {});
+  else bgAudio.pause();
+}
+
+function playerStop() {
+  bgAudio.pause();
+  bgAudio.currentTime = 0;
+}
+
+function playerNext() { playRandomSong(); }
+
+function playerPrev() {
+  bgAudio.currentTime = 0;
+  bgAudio.play().catch(() => {});
+}
+
+function setVolume(val) {
+  bgAudio.volume = val / 100;
+  const pct = document.getElementById('player-vol-pct');
+  if (pct) pct.textContent = val + '%';
+  if (bgAudio.muted && val > 0) {
+    bgAudio.muted = false;
+    document.getElementById('tray-volume').textContent = '🔊';
+  }
+}
+
+bgAudio.addEventListener('play', () => {
+  const btn = document.getElementById('player-playpause');
+  if (btn) btn.innerHTML = '&#9646;&#9646;';
+  updatePlayerSong();
+});
+
+bgAudio.addEventListener('pause', () => {
+  const btn = document.getElementById('player-playpause');
+  if (btn) btn.innerHTML = '&#9654;';
+});
+
+bgAudio.addEventListener('timeupdate', () => {
+  if (!bgAudio.duration) return;
+  const pct = (bgAudio.currentTime / bgAudio.duration) * 100;
+  const fill = document.getElementById('player-seek-fill');
+  if (fill) fill.style.width = pct + '%';
+  const timeEl = document.getElementById('player-time');
+  if (timeEl) {
+    const m = Math.floor(bgAudio.currentTime / 60);
+    const s = Math.floor(bgAudio.currentTime % 60);
+    timeEl.textContent = m + ':' + String(s).padStart(2, '0');
+  }
+});
+
 /* ---- BACKGROUND MUSIC ---- */
 const SONGS = [
   'elements/music/The Reverse Will.mp3',
