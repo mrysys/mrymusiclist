@@ -39,7 +39,7 @@ body {
       #D8EFF8 75%
     );
   */
-  
+
   position: relative;
   display: flex;
   align-items: center;
@@ -288,7 +288,7 @@ body {
   justify-content: center;
   font-size: 32px;
   font-weight: 900;
-  font-family: Impact, 'Arial Black', 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, 'Times New Roman', Times, serif;
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7), 0 0 8px rgba(0,0,0,0.4);
   cursor: default;
