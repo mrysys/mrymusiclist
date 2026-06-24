@@ -15,12 +15,11 @@
       <div class="title-bar-icon">&#9835;</div>
       <div class="title-bar-text">mry's music list &mdash; Album Tier Rankings</div>
       <div class="title-bar-buttons">
-        <button class="tb-btn tb-min" title="Minimize">&#8211;</button>
+        <button class="tb-btn tb-min" title="Minimize" onclick="toggleMainWindow()">&#8211;</button>
         <button class="tb-btn tb-max" title="Maximize">&#9633;</button>
-        <button class="tb-btn tb-close" title="Close">&#10005;</button>
+        <button class="tb-btn tb-close" title="Close" onclick="toggleMainWindow()">&#10005;</button>
       </div>
     </div>
-    
 
     <div class="menu-bar">
       <span class="menu-item" tabindex="0">File</span>
@@ -128,9 +127,9 @@
       <div class="title-bar-icon">&#9835;</div>
       <div class="title-bar-text">Windows Media Player</div>
       <div class="title-bar-buttons">
-        <button class="tb-btn tb-min" title="Minimize">&#8211;</button>
+        <button class="tb-btn tb-min" title="Minimize" onclick="togglePlayer()">&#8211;</button>
         <button class="tb-btn tb-max" title="Maximize">&#9633;</button>
-        <button class="tb-btn tb-close" title="Close" onclick="togglePlayer()">&#10005;</button>
+        <button class="tb-btn tb-close" title="Close" onclick="closePlayer()">&#10005;</button>
       </div>
     </div>
     <div class="player-body">
@@ -161,6 +160,32 @@
     </div>
   </div>
 
+  <!-- Welcome Popup -->
+  <div class="welcome-overlay" id="welcome-overlay">
+    <div class="window welcome-window">
+      <div class="title-bar">
+        <div class="title-bar-icon">&#9835;</div>
+        <div class="title-bar-text">Welcome to mry's music list</div>
+        <div class="title-bar-buttons">
+          <button class="tb-btn tb-close" onclick="closeWelcome()">&#10005;</button>
+        </div>
+      </div>
+      <div class="welcome-body">
+        <div class="welcome-icon-row">
+          <div class="welcome-icon">&#127926;</div>
+          <div class="welcome-text">
+            <p><strong>Welcome to mry's music list!</strong></p>
+            <p>This is your personal album tier list. Rank your favorite music from S tier (god tier) all the way down to F tier (trash).</p>
+            <p>Click <strong>Add Album</strong> to get started, or import a previously saved list.</p>
+          </div>
+        </div>
+        <div class="welcome-footer">
+          <button class="xp-btn xp-btn-primary" onclick="closeWelcome()">&#10003;&nbsp; OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Taskbar -->
   <div class="taskbar">
     <button class="start-btn">
@@ -168,7 +193,7 @@
     </button>
     <div class="taskbar-divider"></div>
     <div class="taskbar-windows">
-      <button class="tw-btn active">&#9835;&nbsp;mry's music list</button>
+      <button class="tw-btn active" id="main-taskbar-btn" onclick="toggleMainWindow()">&#9835;&nbsp;mry's music list</button>
       <button class="tw-btn" id="player-taskbar-btn" onclick="togglePlayer()">&#9835;&nbsp;Media Player</button>
     </div>
     <div class="system-tray">

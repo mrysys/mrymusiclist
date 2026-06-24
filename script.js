@@ -231,6 +231,7 @@ function clearAll() {
   saveAlbums();
   renderTierList();
   setStatus('All albums cleared.');
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
 }
 
 /* ---- CLOCK ---- */
@@ -246,14 +247,42 @@ updateClock();
 /* ---- FORM SUBMIT HANDLER ---- */
 document.getElementById('add-form').addEventListener('submit', submitAlbum);
 
+/* ---- WALLPAPER ---- */
+const WALLPAPERS = [
+  'elements/wallpapers/Autumn.jpg',
+  'elements/wallpapers/Azul.jpg',
+  'elements/wallpapers/Bliss.jpg',
+  'elements/wallpapers/Follow.jpg',
+  'elements/wallpapers/Moon flower (Unedited Version).jpg',
+  'elements/wallpapers/Paradise.jpg',
+  'elements/wallpapers/Snow Trees.jpg',
+  'elements/wallpapers/Solar Eclipse.jpg',
+  'elements/wallpapers/Stonehenge (Getty Images Rescan).jpg',
+  'elements/wallpapers/Tulips.jpg'
+];
+
+(function setRandomWallpaper() {
+  const wp = WALLPAPERS[Math.floor(Math.random() * WALLPAPERS.length)];
+  document.querySelector('.desktop').style.backgroundImage = 'url(“' + wp + '”)';
+})();
+
+/* ---- WELCOME POPUP ---- */
+function closeWelcome() {
+  document.getElementById('welcome-overlay').classList.add('hidden');
+}
+
 /* ---- INIT ---- */
 loadAlbums();
 renderTierList();
 setStatus('Welcome to mry\'s music list! Click “Add Album” to get started.');
 
+/* ---- AUDIO ELEMENT (declared here so MEDIA PLAYER section can use it) ---- */
+const bgAudio = document.getElementById('bg-audio');
+
 /* ---- MEDIA PLAYER ---- */
 let audioCtx = null;
 let analyser = null;
+let gainNode = null;
 let vizAnimId = null;
 const peaks = [];
 
@@ -286,8 +315,11 @@ function initAudioCtx() {
   analyser = audioCtx.createAnalyser();
   analyser.fftSize = 256;
   analyser.smoothingTimeConstant = 0.8;
+  gainNode = audioCtx.createGain();
+  gainNode.gain.value = bgAudio.volume;
   const src = audioCtx.createMediaElementSource(bgAudio);
-  src.connect(analyser);
+  src.connect(gainNode);
+  gainNode.connect(analyser);
   analyser.connect(audioCtx.destination);
 }
 
@@ -300,11 +332,20 @@ function togglePlayer() {
   if (!showing) {
     initAudioCtx();
     audioCtx.resume().catch(() => {});
-    startViz();
+    requestAnimationFrame(startViz);
     updatePlayerSong();
   } else {
     stopViz();
   }
+}
+
+function closePlayer() {
+  const win = document.getElementById('player-window');
+  const btn = document.getElementById('player-taskbar-btn');
+  win.style.display = 'none';
+  btn.classList.remove('active');
+  stopViz();
+  bgAudio.pause();
 }
 
 function updatePlayerSong() {
@@ -387,9 +428,11 @@ function playerPrev() {
 }
 
 function setVolume(val) {
-  bgAudio.volume = val / 100;
+  const v = val / 100;
+  bgAudio.volume = v;
+  if (gainNode) gainNode.gain.value = v;
   const pct = document.getElementById('player-vol-pct');
-  if (pct) pct.textContent = val + '%';
+  if (pct) pct.textContent = Math.round(val) + '%';
   if (bgAudio.muted && val > 0) {
     bgAudio.muted = false;
     document.getElementById('tray-volume').textContent = '🔊';
@@ -438,7 +481,6 @@ const SONGS = [
   'elements/music/nostalgic breakdown.mp3'
 ];
 
-const bgAudio = document.getElementById('bg-audio');
 bgAudio.volume = 0.15;
 
 function playRandomSong() {
@@ -460,5 +502,14 @@ document.addEventListener('keydown', autoplayFallback);
 
 function toggleMute() {
   bgAudio.muted = !bgAudio.muted;
+  if (gainNode) gainNode.gain.value = bgAudio.muted ? 0 : bgAudio.volume;
   document.getElementById('tray-volume').textContent = bgAudio.muted ? '🔇' : '🔊';
+}
+
+function toggleMainWindow() {
+  const win = document.getElementById('main-window');
+  const btn = document.getElementById('main-taskbar-btn');
+  const showing = win.style.display !== 'none';
+  win.style.display = showing ? 'none' : 'block';
+  btn.classList.toggle('active', !showing);
 }
